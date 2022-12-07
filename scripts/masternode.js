@@ -239,7 +239,7 @@ class Masternode {
      */
     async start() {
 	const message = await this.broadcastMessageToHex();
-	const url = `${cNode.url}/relaymasternodebroadcast?params=${message}`;
+	const url = `${cNode.url}/api/relaymasternodebroadcast?params=${message}`;
 	const response = await (await fetch(url)).text();
 	return response.includes("Masternode broadcast sent");
     }
@@ -248,7 +248,7 @@ class Masternode {
      * @return {Promise<Array>} A list of currently active proposal 
      */
     static async getProposals() {
-	const url = `${cNode.url}/getbudgetinfo`;
+	const url = `${cNode.url}/api/getbudgetinfo`;
 	return await (await fetch(url)).json();
     }
 
@@ -284,7 +284,7 @@ class Masternode {
     async vote(hash, voteCode) {
 	const sigTime = Math.round(Date.now() / 1000);
 	const signature = await this.getSignedVoteMessage(hash, voteCode, sigTime);
-	const url = `${cNode.url}/mnbudgetrawvote?params=${this.collateralTxId},${this.outidx},${hash},${voteCode === 1 ? "yes" : "no"},${sigTime},${encodeURI(signature).replaceAll("+", "%2b")}`;
+	const url = `${cNode.url}/api/mnbudgetrawvote?params=${this.collateralTxId},${this.outidx},${hash},${voteCode === 1 ? "yes" : "no"},${sigTime},${encodeURI(signature).replaceAll("+", "%2b")}`;
 	const text = await (await fetch(url)).text();
 	return text;
     }
